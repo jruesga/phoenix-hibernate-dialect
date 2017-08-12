@@ -51,10 +51,10 @@
         <url>https://github.com/jruesga/phoenix-hibernate-dialect/issues</url>
     </issueManagement>
     <distributionManagement>
-        <site>
-            <id>github</id>
-            <url>scm:git:git@github.com:jruesga/phoenix-hibernate-dialect.git</url>
-        </site>
+        <repository>
+            <id>bintray-repo-maven</id>
+            <url>https://api.bintray.com/maven/jruesga/maven/phoenix-hibernate-dialect/;publish=1</url>
+        </repository>
     </distributionManagement>
     <build>
         <testResources>
@@ -72,6 +72,32 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
