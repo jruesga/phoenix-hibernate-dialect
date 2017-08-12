@@ -1,0 +1,23 @@
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+out/
+build/
+target/
+
+# Project files
+*.iml
+.idea
+*.iws
+.settings
+.project
+.classpath
+
+# Thumbnail db
+.DS_Store
+
+# Test environment properties
+src/test/resorces/database.properties
