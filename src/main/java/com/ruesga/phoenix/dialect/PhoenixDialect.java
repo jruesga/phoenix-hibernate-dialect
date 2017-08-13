@@ -78,7 +78,7 @@ public class PhoenixDialect extends Dialect {
     public PhoenixDialect() {
         super();
 
-        // Phoenix functions (https://phoenix.apache.org/language/datatypes.html)
+        // Phoenix datetypes (https://phoenix.apache.org/language/datatypes.html)
         registerColumnType(Types.BIT, "boolean");
         registerColumnType(Types.BIGINT, "bigint");
         registerColumnType(Types.SMALLINT, "smallint");
@@ -111,11 +111,6 @@ public class PhoenixDialect extends Dialect {
                 StandardBasicTypes.DOUBLE, "PERCENT_RANK (?1) WITHIN GROUP (ORDER BY ?2 ASC)"));
         registerFunction("percent_rank_desc", new SQLFunctionTemplate(
                 StandardBasicTypes.DOUBLE, "PERCENT_RANK (?1) WITHIN GROUP (ORDER BY ?2 DESC)"));
-        // TODO FIRST_VALUE
-        // TODO LAST_VALUE
-        // TODO FIRST_VALUES
-        // TODO LAST_VALUES
-        // TODO NTH_VALUE
         registerFunction("stddev_pop", new StandardSQLFunction("stddev_pop", StandardBasicTypes.DOUBLE));
         registerFunction("stddev_samp", new StandardSQLFunction("stddev_samp", StandardBasicTypes.DOUBLE));
 
@@ -131,15 +126,25 @@ public class PhoenixDialect extends Dialect {
         registerFunction("length", new StandardSQLFunction("length", StandardBasicTypes.INTEGER));
         registerFunction("regexp_substr", new StandardSQLFunction("regexp_substr", StandardBasicTypes.STRING));
         registerFunction("regexp_replace", new StandardSQLFunction("regexp_replace", StandardBasicTypes.STRING));
-        // TODO REGEXP_SPLIT
+        registerFunction("to_char", new StandardSQLFunction("to_char", StandardBasicTypes.STRING));
 
-        /**
-REGEXP_SPLIT
-TO_CHAR
-         */
-
-        registerFunction("current_date", new NoArgSQLFunction("current_date", StandardBasicTypes.TIMESTAMP, true));
-        registerFunction("current_time", new NoArgSQLFunction("current_time", StandardBasicTypes.TIME, true));
+        registerFunction("to_date", new StandardSQLFunction("to_date", StandardBasicTypes.DATE));
+        registerFunction("to_time", new StandardSQLFunction("to_time", StandardBasicTypes.TIME));
+        registerFunction("to_timestamp", new StandardSQLFunction("to_timestamp", StandardBasicTypes.TIMESTAMP));
+        registerFunction("current_date", new NoArgSQLFunction("current_date", StandardBasicTypes.TIMESTAMP));
+        registerFunction("current_time", new NoArgSQLFunction("current_time", StandardBasicTypes.TIME));
+        registerFunction("convert_tz", new StandardSQLFunction("convert_tz", StandardBasicTypes.TIMESTAMP));
+        registerFunction("timezone_offset", new StandardSQLFunction("timezone_offset", StandardBasicTypes.INTEGER));
+        registerFunction("now", new NoArgSQLFunction("now", StandardBasicTypes.TIMESTAMP));
+        registerFunction("year", new StandardSQLFunction("year", StandardBasicTypes.INTEGER));
+        registerFunction("month", new StandardSQLFunction("month", StandardBasicTypes.INTEGER));
+        registerFunction("week", new StandardSQLFunction("week", StandardBasicTypes.INTEGER));
+        registerFunction("dayofyear", new StandardSQLFunction("dayofyear", StandardBasicTypes.INTEGER));
+        registerFunction("dayofmonth", new StandardSQLFunction("dayofmonth", StandardBasicTypes.INTEGER));
+        registerFunction("dayofweek", new StandardSQLFunction("dayofweek", StandardBasicTypes.INTEGER));
+        registerFunction("hour", new StandardSQLFunction("hour", StandardBasicTypes.INTEGER));
+        registerFunction("minute", new StandardSQLFunction("minute", StandardBasicTypes.INTEGER));
+        registerFunction("second", new StandardSQLFunction("second", StandardBasicTypes.INTEGER));
     }
 
 

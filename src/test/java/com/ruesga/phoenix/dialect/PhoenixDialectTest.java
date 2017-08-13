@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -207,21 +208,7 @@ public class PhoenixDialectTest {
     }
 
     @Test
-    public void test050_FunctionCurrentDate() throws Exception {
-        TypedQuery<Date> q = em.createQuery("select current_date() from dual d", Date.class);
-        Date now = q.getSingleResult();
-        Assert.assertTrue(Math.abs(System.currentTimeMillis() - now.getTime()) < 300000L);
-    }
-
-    @Test
-    public void test051_FunctionCurrentTime() throws Exception {
-        TypedQuery<Date> q = em.createQuery("select current_time() from dual d", Date.class);
-        Date now = q.getSingleResult();
-        Assert.assertTrue(Math.abs(System.currentTimeMillis() - now.getTime()) < 300000L);
-    }
-
-    @Test
-    public void test052_FunctionPercentileCont() throws Exception {
+    public void test100_FunctionPercentileCont() throws Exception {
         TypedQuery<Double> q = em.createQuery("select percentile_cont_asc(0.90, s.salary) from salary s", Double.class);
         Double percentile = q.getSingleResult();
         Assert.assertEquals(Double.valueOf(89264d), percentile);
@@ -232,7 +219,7 @@ public class PhoenixDialectTest {
     }
 
     @Test
-    public void test053_FunctionPercentileDisc() throws Exception {
+    public void test101_FunctionPercentileDisc() throws Exception {
         TypedQuery<Double> q = em.createQuery("select percentile_disc_asc(0.90, s.salary) from salary s", Double.class);
         Double percentile = q.getSingleResult();
         Assert.assertEquals(Double.valueOf(89204d), percentile);
@@ -243,7 +230,7 @@ public class PhoenixDialectTest {
     }
 
     @Test
-    public void test054_FunctionPercentRank() throws Exception {
+    public void test102_FunctionPercentRank() throws Exception {
         TypedQuery<Double> q = em.createQuery("select percent_rank_asc(0.90, s.salary) from salary s", Double.class);
         Double percentile = q.getSingleResult();
         Assert.assertEquals(Double.valueOf(0d), percentile);
@@ -254,106 +241,249 @@ public class PhoenixDialectTest {
     }
 
     @Test
-    public void test055_FunctionStdDevPop() throws Exception {
+    public void test103_FunctionStdDevPop() throws Exception {
         TypedQuery<Double> q = em.createQuery("select stddev_pop(s.salary) from salary s", Double.class);
         Double stddev = q.getSingleResult();
         Assert.assertTrue(Math.abs(stddev.doubleValue() - 16522.5459d) < 0.001d);
     }
 
     @Test
-    public void test056_FunctionStdDevSamp() throws Exception {
+    public void test104_FunctionStdDevSamp() throws Exception {
         TypedQuery<Double> q = em.createQuery("select stddev_samp(s.salary) from salary s", Double.class);
         Double stddev = q.getSingleResult();
         Assert.assertTrue(Math.abs(stddev.doubleValue() - 16546.8975d) < 0.001d);
     }
 
     @Test
-    public void test057_FunctionUpper() throws Exception {
+    public void test105_FunctionUpper() throws Exception {
         TypedQuery<String> q = em.createQuery("select upper('x') from dual d", String.class);
         String result = q.getSingleResult();
         Assert.assertEquals("X", result);
     }
 
     @Test
-    public void test058_FunctionLower() throws Exception {
+    public void test106_FunctionLower() throws Exception {
         TypedQuery<String> q = em.createQuery("select lower('X') from dual d", String.class);
         String result = q.getSingleResult();
         Assert.assertEquals("x", result);
     }
 
     @Test
-    public void test059_FunctionReverse() throws Exception {
+    public void test107_FunctionReverse() throws Exception {
         TypedQuery<String> q = em.createQuery("select reverse('abc') from dual d", String.class);
         String result = q.getSingleResult();
         Assert.assertEquals("cba", result);
     }
 
     @Test
-    public void test060_FunctionSubstr() throws Exception {
+    public void test108_FunctionSubstr() throws Exception {
         TypedQuery<String> q = em.createQuery("select substr('abcdef', 2, 3) from dual d", String.class);
         String result = q.getSingleResult();
         Assert.assertEquals("bcd", result);
     }
 
     @Test
-    public void test061_FunctionInstr() throws Exception {
+    public void test109_FunctionInstr() throws Exception {
         TypedQuery<Integer> q = em.createQuery("select instr('abcdef', 'bc') from dual d", Integer.class);
         Integer result = q.getSingleResult();
         Assert.assertEquals(Integer.valueOf(2), result);
     }
 
     @Test
-    public void test062_FunctionTrim() throws Exception {
+    public void test110_FunctionTrim() throws Exception {
         TypedQuery<String> q = em.createQuery("select trim(' abcdef ') from dual d", String.class);
         String result = q.getSingleResult();
         Assert.assertEquals("abcdef", result);
     }
 
     @Test
-    public void test063_FunctionLTrim() throws Exception {
+    public void test111_FunctionLTrim() throws Exception {
         TypedQuery<String> q = em.createQuery("select ltrim(' abcdef ') from dual d", String.class);
         String result = q.getSingleResult();
         Assert.assertEquals("abcdef ", result);
     }
 
     @Test
-    public void test063_FunctionRTrim() throws Exception {
+    public void test112_FunctionRTrim() throws Exception {
         TypedQuery<String> q = em.createQuery("select rtrim(' abcdef ') from dual d", String.class);
         String result = q.getSingleResult();
         Assert.assertEquals(" abcdef", result);
     }
 
     @Test
-    public void test064_FunctionLPad() throws Exception {
+    public void test112_FunctionLPad() throws Exception {
         TypedQuery<String> q = em.createQuery("select lpad('abcdef', 8) from dual d", String.class);
         String result = q.getSingleResult();
         Assert.assertEquals("  abcdef", result);
     }
 
     @Test
-    public void test065_FunctionLength() throws Exception {
+    public void test113_FunctionLength() throws Exception {
         TypedQuery<Integer> q = em.createQuery("select length('abcdef') from dual d", Integer.class);
         Integer result = q.getSingleResult();
         Assert.assertEquals(Integer.valueOf("abcdef".length()), result);
     }
 
     @Test
-    public void test066_FunctionRegexpSubstr() throws Exception {
+    public void test114_FunctionRegexpSubstr() throws Exception {
         TypedQuery<String> q = em.createQuery("select regexp_substr('na1-appsrv35-sj35', '[^-]+') from dual d", String.class);
         String result = q.getSingleResult();
         Assert.assertEquals("na1", result);
     }
 
     @Test
-    public void test067_FunctionRegexpReplace() throws Exception {
+    public void test115_FunctionRegexpReplace() throws Exception {
         TypedQuery<String> q = em.createQuery("select regexp_replace('abc123ABC', '[0-9]+', '#') from dual d", String.class);
         String result = q.getSingleResult();
         Assert.assertEquals("abc#ABC", result);
     }
 
+    @Test
+    public void test116_FunctionToCharDate() throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        TypedQuery<String> q = em.createQuery("select to_char(current_date(), 'yyyy-MM-dd') from dual d", String.class);
+        String result = q.getSingleResult();
+        Assert.assertEquals(sdf.format(new Date()), result);
+    }
 
     @Test
-    public void test101_Insert() throws Exception {
+    public void test117_FunctionToCharNumber() throws Exception {
+        TypedQuery<String> q = em.createQuery("select to_char(23.5678, '#0.0') from dual d", String.class);
+        String result = q.getSingleResult();
+        Assert.assertEquals("23.6", result.replace(",", "."));
+    }
+
+    @Test
+    public void test118_FunctionToDate() throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        TypedQuery<Date> q = em.createQuery("select to_date('2017-02-23', 'yyyy-MM-dd', :tz) from dual d", Date.class);
+        q.setParameter("tz", TimeZone.getDefault().getID());
+        Date result = q.getSingleResult();
+        Assert.assertEquals("2017-02-23", sdf.format(result));
+    }
+
+    @Test
+    public void test119_FunctionToTime() throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        TypedQuery<Date> q = em.createQuery("select to_time('2005-10-01 14:03:22.559') from dual d", Date.class);
+        Date result = q.getSingleResult();
+        Assert.assertEquals("14:03:22", sdf.format(result));
+    }
+
+    @Test
+    public void test120_FunctionToTimestamp() throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        TypedQuery<Date> q = em.createQuery(
+                "select to_timestamp('2005-10-01 14:03:22.559', 'yyyy-MM-dd HH:mm:ss.SSS') from dual d", Date.class);
+        Date result = q.getSingleResult();
+        Assert.assertEquals("2005-10-01 14:03:22.559", sdf.format(result));
+    }
+
+    @Test
+    public void test121_FunctionConvertTz() throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        TypedQuery<Date> q = em.createQuery("select CONVERT_TZ(to_date('2010-01-01', 'YYYY-MM-DD', 'UTC'), " +
+                        "'UTC', 'Europe/Prague') from dual d", Date.class);
+        Date result = q.getSingleResult();
+        Assert.assertEquals("2010-01-04 02:00:00.000", sdf.format(result));
+    }
+
+    @Test
+    public void test122_FunctionTimezoneOffset() throws Exception {
+        TypedQuery<Integer> q = em.createQuery("select TIMEZONE_OFFSET('Indian/Cocos', to_date('2010-01-01', " +
+                "'YYYY-MM-DD', 'UTC')) from dual d", Integer.class);
+        Integer result = q.getSingleResult();
+        Assert.assertEquals(Integer.valueOf(390), result);
+    }
+
+    @Test
+    public void test123_FunctionCurrentDate() throws Exception {
+        TypedQuery<Date> q = em.createQuery("select current_date() from dual d", Date.class);
+        Date now = q.getSingleResult();
+        Assert.assertTrue(Math.abs(System.currentTimeMillis() - now.getTime()) < 300000L);
+    }
+
+    @Test
+    public void test124_FunctionCurrentTime() throws Exception {
+        TypedQuery<Date> q = em.createQuery("select current_time() from dual d", Date.class);
+        Date now = q.getSingleResult();
+        Assert.assertTrue(Math.abs(System.currentTimeMillis() - now.getTime()) < 300000L);
+    }
+
+    @Test
+    public void test125_FunctionNow() throws Exception {
+        TypedQuery<Date> q = em.createQuery("select now() from dual d", Date.class);
+        Date now = q.getSingleResult();
+        Assert.assertTrue(Math.abs(System.currentTimeMillis() - now.getTime()) < 300000L);
+    }
+
+    @Test
+    public void test126_FunctionYear() throws Exception {
+        TypedQuery<Integer> q = em.createQuery("select year(to_date('2017-06-17 12:54:23')) from dual d", Integer.class);
+        Integer result = q.getSingleResult();
+        Assert.assertEquals(Integer.valueOf(2017), result);
+    }
+
+    @Test
+    public void test127_FunctionMonth() throws Exception {
+        TypedQuery<Integer> q = em.createQuery("select month(to_date('2017-06-17 12:54:23')) from dual d", Integer.class);
+        Integer result = q.getSingleResult();
+        Assert.assertEquals(Integer.valueOf(06), result);
+    }
+
+    @Test
+    public void test128_FunctionWeek() throws Exception {
+        TypedQuery<Integer> q = em.createQuery("select week(to_date('2017-06-17 12:54:23')) from dual d", Integer.class);
+        Integer result = q.getSingleResult();
+        Assert.assertEquals(Integer.valueOf(24), result);
+    }
+
+    @Test
+    public void test129_FunctionDayOfYear() throws Exception {
+        TypedQuery<Integer> q = em.createQuery("select dayofyear(to_date('2017-06-17 12:54:23')) from dual d", Integer.class);
+        Integer result = q.getSingleResult();
+        Assert.assertEquals(Integer.valueOf(168), result);
+    }
+
+    @Test
+    public void test130_FunctionDayOfMonth() throws Exception {
+        TypedQuery<Integer> q = em.createQuery("select dayofmonth(to_date('2017-06-17 12:54:23')) from dual d", Integer.class);
+        Integer result = q.getSingleResult();
+        Assert.assertEquals(Integer.valueOf(17), result);
+    }
+
+    @Test
+    public void test131_FunctionDayOfWeek() throws Exception {
+        TypedQuery<Integer> q = em.createQuery("select dayofweek(to_date('2017-06-17 12:54:23')) from dual d", Integer.class);
+        Integer result = q.getSingleResult();
+        Assert.assertEquals(Integer.valueOf(6), result);
+    }
+
+    @Test
+    public void test132_FunctionHour() throws Exception {
+        TypedQuery<Integer> q = em.createQuery("select hour(to_date('2017-06-17 12:54:23')) from dual d", Integer.class);
+        Integer result = q.getSingleResult();
+        Assert.assertEquals(Integer.valueOf(12), result);
+    }
+
+    @Test
+    public void test133_FunctionMinute() throws Exception {
+        TypedQuery<Integer> q = em.createQuery("select minute(to_date('2017-06-17 12:54:23')) from dual d", Integer.class);
+        Integer result = q.getSingleResult();
+        Assert.assertEquals(Integer.valueOf(54), result);
+    }
+
+    @Test
+    public void test134_FunctionSecond() throws Exception {
+        TypedQuery<Integer> q = em.createQuery("select second(to_date('2017-06-17 12:54:23')) from dual d", Integer.class);
+        Integer result = q.getSingleResult();
+        Assert.assertEquals(Integer.valueOf(23), result);
+    }
+
+    @Test
+    public void test201_Insert() throws Exception {
         em.getTransaction().begin();
 
         Employee e = new Employee();
@@ -375,7 +505,7 @@ public class PhoenixDialectTest {
     }
 
     @Test(expected=NoResultException.class)
-    public void test102_Delete() {
+    public void test301_Delete() {
         TypedQuery<Employee> q = em.createQuery("select e from employee e where e.empNo = :empNo", Employee.class);
         q.setParameter("empNo", 10003);
         Employee e = q.getSingleResult();
@@ -391,7 +521,7 @@ public class PhoenixDialectTest {
     }
 
     @Test
-    public void test103_Update() {
+    public void test401_Update() {
         TypedQuery<Employee> q = em.createQuery("select e from employee e where e.empNo = :empNo", Employee.class);
         q.setParameter("empNo", 10001);
         Employee e = q.getSingleResult();
