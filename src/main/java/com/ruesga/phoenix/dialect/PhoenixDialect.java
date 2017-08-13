@@ -145,6 +145,22 @@ public class PhoenixDialect extends Dialect {
         registerFunction("hour", new StandardSQLFunction("hour", StandardBasicTypes.INTEGER));
         registerFunction("minute", new StandardSQLFunction("minute", StandardBasicTypes.INTEGER));
         registerFunction("second", new StandardSQLFunction("second", StandardBasicTypes.INTEGER));
+
+        registerFunction("md5", new StandardSQLFunction("md5", StandardBasicTypes.BINARY));
+
+        registerFunction("sign", new StandardSQLFunction("sign", StandardBasicTypes.INTEGER));
+        registerFunction("abs", new StandardSQLFunction("abs", StandardBasicTypes.DOUBLE));
+        registerFunction("sqrt", new StandardSQLFunction("sqrt", StandardBasicTypes.DOUBLE));
+        registerFunction("cbrt", new StandardSQLFunction("cbrt", StandardBasicTypes.DOUBLE));
+        registerFunction("exp", new StandardSQLFunction("exp", StandardBasicTypes.DOUBLE));
+        registerFunction("power", new StandardSQLFunction("power", StandardBasicTypes.DOUBLE));
+        registerFunction("ln", new StandardSQLFunction("ln", StandardBasicTypes.DOUBLE));
+        registerFunction("log", new StandardSQLFunction("log", StandardBasicTypes.DOUBLE));
+        registerFunction("round", new StandardSQLFunction("round", StandardBasicTypes.DOUBLE));
+        registerFunction("ceil", new StandardSQLFunction("ceil", StandardBasicTypes.DOUBLE));
+        registerFunction("floor", new StandardSQLFunction("floor", StandardBasicTypes.DOUBLE));
+        registerFunction("to_number", new StandardSQLFunction("to_number", StandardBasicTypes.DOUBLE));
+        registerFunction("rand", new NoArgSQLFunction("rand", StandardBasicTypes.DOUBLE));
     }
 
 
