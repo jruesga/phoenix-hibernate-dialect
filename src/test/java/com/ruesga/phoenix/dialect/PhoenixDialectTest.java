@@ -181,6 +181,31 @@ public class PhoenixDialectTest {
     }
 
     @Test
+    public void test010_SelectLimit() throws Exception {
+        TypedQuery<Department> q = em.createQuery("select d from department d order by d.deptNo asc", Department.class);
+        List<Department> departments = q.setMaxResults(2).getResultList();
+        Assert.assertEquals(departments.size(), 2L);
+        for (int i = 0; i < 2; i++) {
+            Assert.assertEquals(departments.get(i).getDeptNo(), i + 1);
+        }
+    }
+
+    @Test
+    public void test011_SelectFirstResultQuery() throws Exception {
+        TypedQuery<Employee> q = em.createQuery("select e from employee e order by e.empNo asc", Employee.class);
+        List<Employee> employees = q.setFirstResult(5).getResultList();
+        Assert.assertEquals(employees.get(0).getEmpNo(), 10006);
+    }
+
+    @Test
+    public void test012_SelectPagedQuery() throws Exception {
+        TypedQuery<Employee> q = em.createQuery("select e from employee e order by e.empNo asc", Employee.class);
+        List<Employee> employees = q.setMaxResults(5).setFirstResult(5).getResultList();
+        Assert.assertEquals(employees.size(), 5L);
+        Assert.assertEquals(employees.get(0).getEmpNo(), 10006);
+    }
+
+    @Test
     public void test101_Insert() throws Exception {
         em.getTransaction().begin();
 

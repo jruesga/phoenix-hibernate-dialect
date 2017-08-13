@@ -25,9 +25,11 @@ import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.function.NoArgSQLFunction;
 import org.hibernate.dialect.pagination.AbstractLimitHandler;
 import org.hibernate.dialect.pagination.LimitHandler;
+import org.hibernate.dialect.pagination.LimitHelper;
 import org.hibernate.dialect.unique.UniqueDelegate;
 import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
 import org.hibernate.engine.jdbc.env.spi.NameQualifierSupport;
+import org.hibernate.engine.spi.RowSelection;
 import org.hibernate.mapping.Column;
 import org.hibernate.mapping.Table;
 import org.hibernate.mapping.UniqueKey;
@@ -120,6 +122,17 @@ public class PhoenixDialect extends Dialect {
             @Override
             public boolean supportsLimit() {
                 return true;
+            }
+
+            @Override
+            public String processSql(String sql, RowSelection selection) {
+                if (LimitHelper.useLimit(this, selection)) {
+                    final boolean hasMaxRows = LimitHelper.hasMaxRows(selection);
+                    final boolean hasOffset = LimitHelper.hasFirstRow(selection);
+                    return sql + (hasMaxRows ? " limit ?" : "")
+                                + (hasOffset ? " offset ?" : "");
+                }
+                return sql;
             }
         };
     }
