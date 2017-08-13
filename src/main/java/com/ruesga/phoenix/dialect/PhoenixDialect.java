@@ -138,6 +138,7 @@ public class PhoenixDialect extends Dialect {
         registerFunction("now", new NoArgSQLFunction("now", StandardBasicTypes.TIMESTAMP));
         registerFunction("year", new StandardSQLFunction("year", StandardBasicTypes.INTEGER));
         registerFunction("month", new StandardSQLFunction("month", StandardBasicTypes.INTEGER));
+        registerFunction("day", new StandardSQLFunction("dayofmonth", StandardBasicTypes.INTEGER));
         registerFunction("week", new StandardSQLFunction("week", StandardBasicTypes.INTEGER));
         registerFunction("dayofyear", new StandardSQLFunction("dayofyear", StandardBasicTypes.INTEGER));
         registerFunction("dayofmonth", new StandardSQLFunction("dayofmonth", StandardBasicTypes.INTEGER));
