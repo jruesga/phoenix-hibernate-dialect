@@ -80,7 +80,7 @@ hbase-site.xml configuration.
 
 ### Want to contribute?
 
-Just file new issues and features or send pull requests.
+Just file new issues/feature request or send pull requests.
 
 ### Licenses
 
