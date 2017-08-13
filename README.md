@@ -86,6 +86,10 @@ Just file new issues/feature request or send pull requests.
 
 This source was released under the terms of [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) license.
 
+The test database is a partial subset of the [MySQL Employees Sample Database](https://dev.mysql.com/doc/employee/en/)
+released under the [Creative Commons Attribution-Share Alike 3.0 Unported License](http://creativecommons.org/licenses/by-sa/3.0/)
+
+
 ```
 Copyright (C) 2017 Jorge Ruesga
 

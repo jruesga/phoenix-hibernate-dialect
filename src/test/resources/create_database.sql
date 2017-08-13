@@ -1,5 +1,5 @@
 -- 
--- Partial database from MySQL Employees Sample Database (https://dev.mysql.com/doc/employee/en/)
+-- Partial subset of the MySQL Employees Sample Database (https://dev.mysql.com/doc/employee/en/)
 -- Licenced under Creative Commons Attribution-Share Alike 3.0 Unported License (http://creativecommons.org/licenses/by-sa/3.0/)
 --
 
