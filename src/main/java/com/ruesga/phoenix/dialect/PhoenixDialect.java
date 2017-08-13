@@ -23,6 +23,8 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.boot.Metadata;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.function.NoArgSQLFunction;
+import org.hibernate.dialect.function.SQLFunctionTemplate;
+import org.hibernate.dialect.function.StandardSQLFunction;
 import org.hibernate.dialect.pagination.AbstractLimitHandler;
 import org.hibernate.dialect.pagination.LimitHandler;
 import org.hibernate.dialect.pagination.LimitHelper;
@@ -76,6 +78,7 @@ public class PhoenixDialect extends Dialect {
     public PhoenixDialect() {
         super();
 
+        // Phoenix functions (https://phoenix.apache.org/language/datatypes.html)
         registerColumnType(Types.BIT, "boolean");
         registerColumnType(Types.BIGINT, "bigint");
         registerColumnType(Types.SMALLINT, "smallint");
@@ -95,7 +98,24 @@ public class PhoenixDialect extends Dialect {
         registerColumnType(Types.VARBINARY, "varbinary");
         registerColumnType(Types.ARRAY, "array[$l]");
 
-        // TODO Add Phoenix functions (https://phoenix.apache.org/language/functions.html)
+        // Phoenix functions (https://phoenix.apache.org/language/functions.html)
+        registerFunction("percentile_cont_asc", new SQLFunctionTemplate(
+                StandardBasicTypes.DOUBLE, "PERCENTILE_CONT (?1) WITHIN GROUP (ORDER BY ?2 ASC)"));
+        registerFunction("percentile_cont_desc", new SQLFunctionTemplate(
+                StandardBasicTypes.DOUBLE, "PERCENTILE_CONT (?1) WITHIN GROUP (ORDER BY ?2 DESC)"));
+        registerFunction("percentile_disc_asc", new SQLFunctionTemplate(
+                StandardBasicTypes.DOUBLE, "PERCENTILE_DISC (?1) WITHIN GROUP (ORDER BY ?2 ASC)"));
+        registerFunction("percentile_disc_desc", new SQLFunctionTemplate(
+                StandardBasicTypes.DOUBLE, "PERCENTILE_DISC (?1) WITHIN GROUP (ORDER BY ?2 DESC)"));
+        registerFunction("percent_rank_asc", new SQLFunctionTemplate(
+                StandardBasicTypes.DOUBLE, "PERCENT_RANK (?1) WITHIN GROUP (ORDER BY ?2 ASC)"));
+        registerFunction("percent_rank_desc", new SQLFunctionTemplate(
+                StandardBasicTypes.DOUBLE, "PERCENT_RANK (?1) WITHIN GROUP (ORDER BY ?2 DESC)"));
+        // TODO FIRST_VALUE, LAST_VALUE, FIRST_VALUES, LAST_VALUES, NTH_VALUE
+        registerFunction("stddev_pop", new StandardSQLFunction("stddev_pop", StandardBasicTypes.DOUBLE));
+        registerFunction("stddev_samp", new StandardSQLFunction("stddev_samp", StandardBasicTypes.DOUBLE));
+
+
         registerFunction("current_date", new NoArgSQLFunction("current_date", StandardBasicTypes.TIMESTAMP, true));
         registerFunction("current_time", new NoArgSQLFunction("current_time", StandardBasicTypes.TIME, true));
     }

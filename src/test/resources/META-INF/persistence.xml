@@ -32,7 +32,7 @@
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="true" />
             <property name="hibernate.dialect" value="com.ruesga.phoenix.dialect.PhoenixDialect" />
-            <property name="hibernate.hbm2ddl.auto" value="create-drop" />
+            <property name="hibernate.hbm2ddl.auto" value="none" />
             <property name="hibernate.hbm2dll.create_namespaces" value="true" />
             <property name="hibernate.hbm2ddl.import_files" value="create_database.sql"/>
 

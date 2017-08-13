@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -204,6 +205,67 @@ public class PhoenixDialectTest {
         Assert.assertEquals(employees.size(), 5L);
         Assert.assertEquals(employees.get(0).getEmpNo(), 10006);
     }
+
+    @Test
+    public void test050_FunctionCurrentDate() throws Exception {
+        TypedQuery<Date> q = em.createQuery("select current_date() from dual d", Date.class);
+        Date now = q.getSingleResult();
+        Assert.assertTrue(Math.abs(System.currentTimeMillis() - now.getTime()) < 300000L);
+    }
+
+    @Test
+    public void test051_FunctionCurrentTime() throws Exception {
+        TypedQuery<Date> q = em.createQuery("select current_time() from dual d", Date.class);
+        Date now = q.getSingleResult();
+        Assert.assertTrue(Math.abs(System.currentTimeMillis() - now.getTime()) < 300000L);
+    }
+
+    @Test
+    public void test052_FunctionPercentileCont() throws Exception {
+        TypedQuery<Double> q = em.createQuery("select percentile_cont_asc(0.90, s.salary) from salary s", Double.class);
+        Double percentile = q.getSingleResult();
+        Assert.assertEquals(percentile, Double.valueOf(89264d));
+
+        q = em.createQuery("select percentile_cont_desc(0.90, s.salary) from salary s", Double.class);
+        percentile = q.getSingleResult();
+        Assert.assertEquals(percentile, Double.valueOf(44238d));
+    }
+
+    @Test
+    public void test053_FunctionPercentileDisc() throws Exception {
+        TypedQuery<Double> q = em.createQuery("select percentile_disc_asc(0.90, s.salary) from salary s", Double.class);
+        Double percentile = q.getSingleResult();
+        Assert.assertEquals(percentile, Double.valueOf(89204d));
+
+        q = em.createQuery("select percentile_disc_desc(0.90, s.salary) from salary s", Double.class);
+        percentile = q.getSingleResult();
+        Assert.assertEquals(percentile, Double.valueOf(44276d));
+    }
+
+    @Test
+    public void test054_FunctionPercentRank() throws Exception {
+        TypedQuery<Double> q = em.createQuery("select percent_rank_asc(0.90, s.salary) from salary s", Double.class);
+        Double percentile = q.getSingleResult();
+        Assert.assertEquals(percentile, Double.valueOf(0d));
+
+        q = em.createQuery("select percent_rank_desc(0.90, s.salary) from salary s", Double.class);
+        percentile = q.getSingleResult();
+        Assert.assertEquals(percentile, Double.valueOf(1d));
+    }
+
+    @Test
+    public void test060_FunctionStdDevPop() throws Exception {
+        TypedQuery<Double> q = em.createQuery("select stddev_pop(s.salary) from salary s", Double.class);
+        Double stddev = q.getSingleResult();
+        Assert.assertTrue(Math.abs(stddev.doubleValue() - 16522.5459d) < 0.001d);
+    }
+    @Test
+    public void test061_FunctionStdDevSamp() throws Exception {
+        TypedQuery<Double> q = em.createQuery("select stddev_samp(s.salary) from salary s", Double.class);
+        Double stddev = q.getSingleResult();
+        Assert.assertTrue(Math.abs(stddev.doubleValue() - 16546.8975d) < 0.001d);
+    }
+
 
     @Test
     public void test101_Insert() throws Exception {

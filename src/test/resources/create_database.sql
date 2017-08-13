@@ -3,12 +3,15 @@
 -- Licenced under Creative Commons Attribution-Share Alike 3.0 Unported License (http://creativecommons.org/licenses/by-sa/3.0/)
 --
 
+delete from T.X
 delete from T.E
 delete from T.D
 delete from T.DE
 delete from T.DM
 delete from T.S
 delete from T.T
+
+UPSERT INTO T.X (DUMMY) VALUES ('X')
 
 UPSERT INTO T.E (EMP_NO, BIRTH_DATE, FIRST_NAME, LAST_NAME, GENDER, HIRE_DATE) VALUES (10001,'1953-09-02','Georgi','Facello',0,'1986-06-26')
 UPSERT INTO T.E (EMP_NO, BIRTH_DATE, FIRST_NAME, LAST_NAME, GENDER, HIRE_DATE) VALUES (10002,'1964-06-02','Bezalel','Simmel',1,'1985-11-21')
