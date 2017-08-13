@@ -111,10 +111,32 @@ public class PhoenixDialect extends Dialect {
                 StandardBasicTypes.DOUBLE, "PERCENT_RANK (?1) WITHIN GROUP (ORDER BY ?2 ASC)"));
         registerFunction("percent_rank_desc", new SQLFunctionTemplate(
                 StandardBasicTypes.DOUBLE, "PERCENT_RANK (?1) WITHIN GROUP (ORDER BY ?2 DESC)"));
-        // TODO FIRST_VALUE, LAST_VALUE, FIRST_VALUES, LAST_VALUES, NTH_VALUE
+        // TODO FIRST_VALUE
+        // TODO LAST_VALUE
+        // TODO FIRST_VALUES
+        // TODO LAST_VALUES
+        // TODO NTH_VALUE
         registerFunction("stddev_pop", new StandardSQLFunction("stddev_pop", StandardBasicTypes.DOUBLE));
         registerFunction("stddev_samp", new StandardSQLFunction("stddev_samp", StandardBasicTypes.DOUBLE));
 
+        registerFunction("upper", new StandardSQLFunction("upper", StandardBasicTypes.STRING));
+        registerFunction("lower", new StandardSQLFunction("lower", StandardBasicTypes.STRING));
+        registerFunction("reverse", new StandardSQLFunction("reverse", StandardBasicTypes.STRING));
+        registerFunction("substr", new StandardSQLFunction("substr", StandardBasicTypes.STRING));
+        registerFunction("instr", new StandardSQLFunction("instr", StandardBasicTypes.INTEGER));
+        registerFunction("trim", new StandardSQLFunction("trim", StandardBasicTypes.STRING));
+        registerFunction("ltrim", new StandardSQLFunction("ltrim", StandardBasicTypes.STRING));
+        registerFunction("rtrim", new StandardSQLFunction("rtrim", StandardBasicTypes.STRING));
+        registerFunction("lpad", new StandardSQLFunction("lpad", StandardBasicTypes.STRING));
+        registerFunction("length", new StandardSQLFunction("length", StandardBasicTypes.INTEGER));
+        registerFunction("regexp_substr", new StandardSQLFunction("regexp_substr", StandardBasicTypes.STRING));
+        registerFunction("regexp_replace", new StandardSQLFunction("regexp_replace", StandardBasicTypes.STRING));
+        // TODO REGEXP_SPLIT
+
+        /**
+REGEXP_SPLIT
+TO_CHAR
+         */
 
         registerFunction("current_date", new NoArgSQLFunction("current_date", StandardBasicTypes.TIMESTAMP, true));
         registerFunction("current_time", new NoArgSQLFunction("current_time", StandardBasicTypes.TIME, true));
