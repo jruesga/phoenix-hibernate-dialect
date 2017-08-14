@@ -20,4 +20,4 @@ target/
 .DS_Store
 
 # Test environment properties
-src/test/resorces/database.properties
+src/test/resources/database.properties
