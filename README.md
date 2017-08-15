@@ -8,7 +8,7 @@ An Apache Phoenix Hibernate dialect.
 ### Build
 
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.ruesga.phoenix/phoenix-hibernate-dialect.svg?maxAge=2592000)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.ruesga.phoenix%22%20AND%20a%3A%22phoenix-hibernate-dialect%22) [![Bintray](https://img.shields.io/bintray/v/jruesga/maven/phoenix-hibernate-dialect.svg?maxAge=2592000)](https://bintray.com/jruesga/maven/phoenix-hibernate-dialect/_latestVersion)
+[ ![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ruesga.phoenix/phoenix-hibernate-dialect/badge.svg?style=flat)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.ruesga.phoenix%22%20AND%20a%3A%22phoenix-hibernate-dialect%22) [ ![Bintray](https://api.bintray.com/packages/jruesga/maven/phoenix-hibernate-dialect/images/download.svg) ](https://bintray.com/jruesga/maven/phoenix-hibernate-dialect/_latestVersion)
 
 The project builds with maven. Just type the next command in the project root directory.
 
