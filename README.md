@@ -83,6 +83,24 @@ hbase-site.xml configuration.
     </configuration>
 ```
 
+##### Using SpringBoot?
+
+If you want to use the library inside an SpringBoot app, you must ensure that the context in the
+aspects is updated by importing the one responsible for initializing the load time weaving into
+the spring-boot configuration:
+
+```java
+@SpringBootApplication
+@ImportResource(locations = "classpath:/META-INF/ctx.spring.weaving.xml")
+public class MySpringBootApplication {
+    public static void main(final String[] args) {
+        DynamicInstrumentationLoader.waitForInitialized();
+        DynamicInstrumentationLoader.initLoadTimeWeavingContext();
+        SpringApplication.run(...);
+    }
+}
+```
+
 ### Want to contribute?
 
 Just file new issues/feature request or send pull requests.
