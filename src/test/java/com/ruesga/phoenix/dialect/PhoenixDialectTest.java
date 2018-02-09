@@ -35,6 +35,7 @@ import org.apache.commons.math3.util.Pair;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -49,6 +50,9 @@ import com.ruesga.phoenix.jpa.entities.TimeRange;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PhoenixDialectTest {
+
+    @ClassRule
+    public static HBaseClusterTestRule cluster = new HBaseClusterTestRule("hbase-site.xml");
 
     private static EntityManager em;
     private static SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");

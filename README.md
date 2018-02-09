@@ -12,24 +12,12 @@ An Apache Phoenix Hibernate dialect.
 
 The project builds with maven. Just type the next command in the project root directory.
 
-    mvn -Dmaven.test.skip=true clean install
+    mvn clean install
 
 To deploy to Bintray, just type the next command in the project root directory. Replace <gpg.passphrase>
 with your current Gpg passphrase.
 
-    mvn -Dmaven.test.skip=true -Dgpg.passphrase=<gpg.passphrase> clean deploy
-
-To build the project passing all the test, just create a file called database.properties in the
-src/test/resources folder and add the following properties:
-
-```
-test.phoenix.dfs.nodenames: HBase zookeepers nodenames in the form <server>:<port>
-test.phoenix.dfs.db.path: HBase path in HDFS
-```
-
-Then type
-
-    mvn clean test
+    mvn -Dgpg.passphrase=<gpg.passphrase> clean deploy
 
 
 ### Usage
@@ -42,7 +30,7 @@ Add the following dependency to your pom.xml.
         <dependency>
             <groupId>com.ruesga.phoenix</groupId>
             <artifactId>phoenix-hibernate-dialect</artifactId>
-            <version>0.0.2</version>
+            <version>0.0.3</version>
         </dependency>
         ...
     </dependencies>
@@ -71,10 +59,6 @@ hbase-site.xml configuration.
 ```xml
     <configuration>
         ...
-        <property>
-            <name>phoenix.schema.isNamespaceMappingEnabled</name>
-            <value>true</value>
-        </property>
         <property>
             <name>hbase.regionserver.wal.codec</name>
             <value>org.apache.hadoop.hbase.regionserver.wal.IndexedWALEditCodec</value>
