@@ -390,16 +390,16 @@ public class PhoenixDialectTest {
     @Test
     public void test121_FunctionConvertTz() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-        TypedQuery<Date> q = em.createQuery("select CONVERT_TZ(to_date('2010-01-01', 'YYYY-MM-DD', 'UTC'), " +
-                        "'UTC', 'Europe/Prague') from dual d", Date.class);
+        TypedQuery<Date> q = em.createQuery("select CONVERT_TZ(to_date('2010-01-01', 'yyyy-MM-dd', 'UTC'), " +
+                        "'UTC', 'Asia/Tokyo') from dual d", Date.class);
         Date result = q.getSingleResult();
-        Assert.assertEquals("2010-01-04 02:00:00.000", sdf.format(result));
+        Assert.assertEquals("2010-01-01 10:00:00.000", sdf.format(result));
     }
 
     @Test
     public void test122_FunctionTimezoneOffset() {
         TypedQuery<Integer> q = em.createQuery("select TIMEZONE_OFFSET('Indian/Cocos', to_date('2010-01-01', " +
-                "'YYYY-MM-DD', 'UTC')) from dual d", Integer.class);
+                "'yyyy-MM-dd', 'UTC')) from dual d", Integer.class);
         Integer result = q.getSingleResult();
         Assert.assertEquals(Integer.valueOf(390), result);
     }
