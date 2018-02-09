@@ -18,6 +18,3 @@ target/
 
 # Thumbnail db
 .DS_Store
-
-# Test environment properties
-src/test/resources/database.properties
