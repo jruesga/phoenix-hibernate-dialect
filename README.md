@@ -17,7 +17,7 @@ The project builds with maven. Just type the next command in the project root di
 To deploy to Bintray, just type the next command in the project root directory. Replace <gpg.passphrase>
 with your current Gpg passphrase.
 
-    mvn -Dgpg.passphrase=<gpg.passphrase> clean deploy
+    mvn -Pdeploy -Dgpg.passphrase=<gpg.passphrase> clean deploy
 
 
 ### Usage
