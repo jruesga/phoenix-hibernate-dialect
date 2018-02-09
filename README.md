@@ -8,7 +8,7 @@ An Apache Phoenix Hibernate dialect.
 ### Build
 
 
-[ ![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ruesga.phoenix/phoenix-hibernate-dialect/badge.svg?style=flat)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.ruesga.phoenix%22%20AND%20a%3A%22phoenix-hibernate-dialect%22) [ ![Bintray](https://api.bintray.com/packages/jruesga/maven/phoenix-hibernate-dialect/images/download.svg) ](https://bintray.com/jruesga/maven/phoenix-hibernate-dialect/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ruesga.phoenix/phoenix-hibernate-dialect/badge.svg?style=flat)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.ruesga.phoenix%22%20AND%20a%3A%22phoenix-hibernate-dialect%22) [![Bintray](https://img.shields.io/bintray/v/jruesga/maven/phoenix-hibernate-dialect.svg?maxAge=2592000)](https://bintray.com/jruesga/maven/phoenix-hibernate-dialect/_latestVersion) [![Build Status](https://travis-ci.org/jruesga/maven/phoenix-hibernate-dialect.svg?branch=master)](https://travis-ci.org/jruesga/maven/phoenix-hibernate-dialect/branches) [![GitHub release](https://img.shields.io/github/release/jruesga/maven/phoenix-hibernate-dialect.svg)](https://github.com/jruesga/maven/phoenix-hibernate-dialect/releases/latest) [![Apache 2.0](https://img.shields.io/github/license/jruesga/maven/phoenix-hibernate-dialect.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 The project builds with maven. Just type the next command in the project root directory.
 
