@@ -8,7 +8,7 @@ An Apache Phoenix Hibernate dialect.
 ### Build
 
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ruesga.phoenix/phoenix-hibernate-dialect/badge.svg?style=flat)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.ruesga.phoenix%22%20AND%20a%3A%22phoenix-hibernate-dialect%22) [![Bintray](https://img.shields.io/bintray/v/jruesga/maven/phoenix-hibernate-dialect.svg?maxAge=2592000)](https://bintray.com/jruesga/maven/phoenix-hibernate-dialect/_latestVersion) [![Build Status](https://travis-ci.org/jruesga/phoenix-hibernate-dialect.svg?branch=master)](https://travis-ci.org/jruesga/phoenix-hibernate-dialect/branches) [![GitHub release](https://img.shields.io/github/release/jruesga/phoenix-hibernate-dialect.svg)](https://github.com/jruesga/phoenix-hibernate-dialect/releases/latest) [![Apache 2.0](https://img.shields.io/github/license/jruesga/phoenix-hibernate-dialect.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ruesga.phoenix/phoenix-hibernate-dialect/badge.svg?style=flat)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.ruesga.phoenix%22%20AND%20a%3A%22phoenix-hibernate-dialect%22) [![Bintray](https://img.shields.io/bintray/v/jruesga/maven/phoenix-hibernate-dialect.svg)](https://bintray.com/jruesga/maven/phoenix-hibernate-dialect) [![Build Status](https://travis-ci.org/jruesga/phoenix-hibernate-dialect.svg?branch=hibernate4)](https://travis-ci.org/jruesga/phoenix-hibernate-dialect/branches) [![GitHub release](https://img.shields.io/github/release/jruesga/phoenix-hibernate-dialect.svg)](https://github.com/jruesga/phoenix-hibernate-dialect/releases/latest) [![Apache 2.0](https://img.shields.io/github/license/jruesga/phoenix-hibernate-dialect.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 The project builds with maven. Just type the next command in the project root directory.
 
@@ -22,7 +22,7 @@ with your current Gpg passphrase.
 
 ### Requirements
 
-Build againsts Hibernate 4 requires Java 7 and AspectJ 1.7.x
+Build againsts Hibernate 4 requires Java 7 and AspectJ 1.7.x.
 
 ### Usage
 
@@ -34,7 +34,7 @@ Add the following dependency to your pom.xml.
         <dependency>
             <groupId>com.ruesga.phoenix</groupId>
             <artifactId>phoenix-hibernate-dialect</artifactId>
-            <version>0.0.3</version>
+            <version>0.0.3-hibernate4</version>
         </dependency>
         ...
     </dependencies>
