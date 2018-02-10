@@ -199,12 +199,11 @@ public class PhoenixDialectTest {
     }
 
     @Test
-    /* FIXME */ @Ignore("hints are not working in hibernate 4. disable for now.")
+    /* FIXME */ @Ignore("hints are not working in hibernate4. disable for now.")
     public void test009_SelectHint() {
-        TypedQuery<Department> q = em.createQuery(" SELECT d from department d " +
+        String hint = new PhoenixDialect.SecondaryIndexHint(Department.class, "D_I0").build();
+        TypedQuery<Department> q = em.createQuery(" SELECT " + hint + " d from department d " +
                     "where d.deptName = :deptName", Department.class);
-        ((org.hibernate.Query)q).addQueryHint(
-                String.valueOf(new PhoenixDialect.SecondaryIndexHint(Department.class, "D_I0").build()));
         q.setParameter("deptName", "Finance");
         Department department = q.getSingleResult();
         Assert.assertEquals("Finance", department.getDeptName());
