@@ -24,6 +24,10 @@ import com.ruesga.phoenix.dialect.PhoenixDialect;
 
 @Aspect
 public class MappingInterceptor {
+    public MappingInterceptor() {
+        super();
+    }
+
     @Around("execution(java.lang.String org.hibernate.mapping.PrimaryKey.sqlConstraintString(..))")
     public String sqlConstraintStringAround(ProceedingJoinPoint joinPoint) throws Throwable {
         Dialect dialect = (Dialect) joinPoint.getArgs()[0];

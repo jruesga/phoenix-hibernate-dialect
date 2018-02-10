@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.MappingException;
-import org.hibernate.boot.Metadata;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.function.NoArgSQLFunction;
 import org.hibernate.dialect.function.SQLFunctionTemplate;
@@ -30,8 +29,6 @@ import org.hibernate.dialect.pagination.AbstractLimitHandler;
 import org.hibernate.dialect.pagination.LimitHandler;
 import org.hibernate.dialect.pagination.LimitHelper;
 import org.hibernate.dialect.unique.UniqueDelegate;
-import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
-import org.hibernate.engine.jdbc.env.spi.NameQualifierSupport;
 import org.hibernate.engine.spi.RowSelection;
 import org.hibernate.mapping.Column;
 import org.hibernate.mapping.Table;
@@ -68,12 +65,16 @@ public class PhoenixDialect extends Dialect {
         }
     }
 
-    @SuppressWarnings("unused")
     private static ClassPathXmlApplicationContext ctx;
     static {
-        DynamicInstrumentationLoader.waitForInitialized();
-        DynamicInstrumentationLoader.initLoadTimeWeavingContext();
-        ctx = new ClassPathXmlApplicationContext("/META-INF/phoenix-spring-context.xml");
+        register();
+    }
+    public static void register() {
+        if (ctx != null) {
+            DynamicInstrumentationLoader.waitForInitialized();
+            DynamicInstrumentationLoader.initLoadTimeWeavingContext();
+            ctx = new ClassPathXmlApplicationContext("/META-INF/phoenix-spring-context.xml");
+        }
     }
 
     public PhoenixDialect() {
@@ -218,15 +219,16 @@ public class PhoenixDialect extends Dialect {
      // limit/offset support ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     @Override
-    public LimitHandler getLimitHandler() {
-        return new AbstractLimitHandler() {
+    public LimitHandler buildLimitHandler(final String sql, final RowSelection selection) {
+        return new AbstractLimitHandler(sql, selection) {
+
             @Override
             public boolean supportsLimit() {
                 return true;
             }
 
             @Override
-            public String processSql(String sql, RowSelection selection) {
+            public String getProcessedSql() {
                 if (LimitHelper.useLimit(this, selection)) {
                     final boolean hasMaxRows = LimitHelper.hasMaxRows(selection);
                     final boolean hasOffset = LimitHelper.hasFirstRow(selection);
@@ -279,8 +281,8 @@ public class PhoenixDialect extends Dialect {
     }
 
     @Override
-    public String[] getDropSchemaCommand(String schemaName) {
-        return new String[] {"drop schema if exists " + schemaName};
+    public String getDropSchemaCommand(String schemaName) {
+        return "drop schema if exists " + schemaName;
     }
 
     @Override
@@ -330,11 +332,6 @@ public class PhoenixDialect extends Dialect {
     }
 
     @Override
-    public NameQualifierSupport getNameQualifierSupport() {
-        return NameQualifierSupport.SCHEMA;
-    }
-
-    @Override
     public boolean hasAlterTable() {
         return false;
     }
@@ -348,7 +345,17 @@ public class PhoenixDialect extends Dialect {
     public UniqueDelegate getUniqueDelegate() {
         return new UniqueDelegate() {
             @Override
+            public String getTableCreationUniqueConstraintsFragment(org.hibernate.metamodel.relational.Table table) {
+                return "";
+            }
+
+            @Override
             public String getTableCreationUniqueConstraintsFragment(Table table) {
+                return "";
+            }
+
+            @Override
+            public String getColumnDefinitionUniquenessFragment(org.hibernate.metamodel.relational.Column column) {
                 return "";
             }
 
@@ -358,29 +365,31 @@ public class PhoenixDialect extends Dialect {
             }
 
             @Override
-            public String getAlterTableToDropUniqueKeyCommand(UniqueKey uniqueKey, Metadata metadata) {
-                final JdbcEnvironment jdbcEnvironment = metadata.getDatabase().getJdbcEnvironment();
-
-                final String tableName = jdbcEnvironment.getQualifiedObjectNameFormatter().format(
-                        uniqueKey.getTable().getQualifiedTableName(), PhoenixDialect.this);
-
-                final String constraintName = PhoenixDialect.this.quote( uniqueKey.getName() );
+            public String getAlterTableToDropUniqueKeyCommand(UniqueKey uniqueKey, String defaultCatalog, String defaultSchema) {
+                final String tableName = uniqueKey.getTable().getQualifiedName(
+                        PhoenixDialect.this, defaultCatalog, defaultSchema);
+                final String constraintName = quote(uniqueKey.getName());
 
                 return "drop index if exists " + constraintName + " on " + tableName;
             }
 
             @Override
-            public String getAlterTableToAddUniqueKeyCommand(UniqueKey uniqueKey, Metadata metadata) {
-                final JdbcEnvironment jdbcEnvironment = metadata.getDatabase().getJdbcEnvironment();
+            public String getAlterTableToDropUniqueKeyCommand(org.hibernate.metamodel.relational.UniqueKey uniqueKey) {
+                final String tableName = uniqueKey.getTable().getQualifiedName(PhoenixDialect.this);
+                final String constraintName = quote(uniqueKey.getName());
 
-                final String tableName = jdbcEnvironment.getQualifiedObjectNameFormatter().format(
-                        uniqueKey.getTable().getQualifiedTableName(), PhoenixDialect.this);
+                return "drop index if exists " + constraintName + " on " + tableName;
+            }
 
-                final String constraintName = PhoenixDialect.this.quote( uniqueKey.getName() );
+            @Override
+            public String getAlterTableToAddUniqueKeyCommand(UniqueKey uniqueKey, String defaultCatalog, String defaultSchema) {
+                final String tableName = uniqueKey.getTable().getQualifiedName(
+                        PhoenixDialect.this, defaultCatalog, defaultSchema);
+                final String constraintName = quote(uniqueKey.getName());
 
                 final StringBuilder columns = new StringBuilder();
                 final Iterator<org.hibernate.mapping.Column> columnIterator = uniqueKey.columnIterator();
-                while ( columnIterator.hasNext() ) {
+                while (columnIterator.hasNext()) {
                     final org.hibernate.mapping.Column column = columnIterator.next();
                     columns.append(column.getQuotedName(PhoenixDialect.this));
                     if (uniqueKey.getColumnOrderMap().containsKey(column)) {
@@ -391,8 +400,27 @@ public class PhoenixDialect extends Dialect {
                     }
                 }
 
-                return "create index " + constraintName + " on " + tableName
-                        + " (" + columns.toString() + ")";
+                return "create index if not exists " + constraintName + " on " + tableName
+                      + " (" + columns.toString() + ")";
+            }
+
+            @Override
+            public String getAlterTableToAddUniqueKeyCommand(org.hibernate.metamodel.relational.UniqueKey uniqueKey) {
+                final String tableName = uniqueKey.getTable().getQualifiedName(PhoenixDialect.this);
+                final String constraintName = quote(uniqueKey.getName());
+
+                final StringBuilder columns = new StringBuilder();
+                final Iterator<?> columnIterator = uniqueKey.getColumns().iterator();
+                while ( columnIterator.hasNext() ) {
+                    final org.hibernate.mapping.Column column = (org.hibernate.mapping.Column) columnIterator.next();
+                    columns.append(column.getQuotedName(PhoenixDialect.this));
+                    if ( columnIterator.hasNext() ) {
+                        columns.append( ", " );
+                    }
+                }
+
+                return "create index if not exists " + constraintName + " on " + tableName
+                      + " (" + columns.toString() + ")";
             }
         };
     }

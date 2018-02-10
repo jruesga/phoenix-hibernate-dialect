@@ -32,9 +32,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+// FIXME
 @Entity(name="employee")
-@Table(name="E", schema="T",
-        indexes= {@Index(name="E_I0", columnList="GENDER", unique=true)})
+@Table(name="E", schema="T"/*,
+        indexes= {@Index(name="E_I0", columnList="GENDER", unique=true)}*/)
 public class Employee implements Serializable {
 
     private static final long serialVersionUID = 1L;

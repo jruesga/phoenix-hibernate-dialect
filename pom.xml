@@ -22,7 +22,7 @@
     <groupId>com.ruesga.phoenix</groupId>
     <artifactId>phoenix-hibernate-dialect</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.3</version>
+    <version>0.0.3-hibernate4</version>
     <name>phoenix-hibernate-dialect</name>
     <description>An Apache Phoenix Hibernate dialect.</description>
     <url>https://github.com/jruesga/phoenix-hibernate-dialect</url>
@@ -178,10 +178,21 @@
             <artifactId>spring-aop</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <!--  invesdwin-instrument (https://github.com/subes/invesdwin-instrument)  -->
         <dependency>
-            <groupId>de.invesdwin</groupId>
-            <artifactId>invesdwin-instrument</artifactId>
-            <version>${invesdwin.instrument.version}</version>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-instrument</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zeroturnaround</groupId>
+            <artifactId>zt-exec</artifactId>
+            <version>1.10</version>
         </dependency>
 
         <dependency>
@@ -267,12 +278,12 @@
         </profile>
     </profiles>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>1.7</java.version>
         <junit.version>4.12</junit.version>
-        <hibernate.version>5.2.12.Final</hibernate.version>
+        <hibernate.version>4.3.11.Final</hibernate.version>
         <hbase.version>1.3.1</hbase.version>
         <phoenix.version>4.13.1-HBase-1.3</phoenix.version>
-        <aspectj.version>1.8.10</aspectj.version>
+        <aspectj.version>1.7.2</aspectj.version>
         <spring.version>4.3.14.RELEASE</spring.version>
         <invesdwin.instrument.version>1.0.0</invesdwin.instrument.version>
         <curator.version>4.0.0</curator.version>

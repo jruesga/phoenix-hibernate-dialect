@@ -33,7 +33,7 @@ public class Parameter implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "P_SQ")
-    @SequenceGenerator(name = "P_SQ", schema = "T", sequenceName = "P_SQ", initialValue = 1, allocationSize = 50)
+    @SequenceGenerator(name = "P_SQ", schema = "T", sequenceName = "P_SQ", initialValue = 1, allocationSize = 1)
     private Long id;
 
     @Column(name="VALUE", nullable=true, length = 50)
