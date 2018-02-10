@@ -20,6 +20,11 @@ with your current Gpg passphrase.
     mvn -Pdeploy -Dgpg.passphrase=<gpg.passphrase> clean deploy
 
 
+### Requirements
+
+Build againsts Hibernate 4 requires Java 7 and AspectJ 1.7.x
+
+
 ### Usage
 
 Add the following dependency to your pom.xml.
