@@ -376,10 +376,11 @@ public class PhoenixDialectTest {
     @Test
     public void test121_FunctionConvertTz() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         TypedQuery<Date> q = em.createQuery("select CONVERT_TZ(to_date('2010-01-01', 'yyyy-MM-dd', 'UTC'), " +
                         "'UTC', 'Asia/Tokyo') from dual d", Date.class);
         Date result = q.getSingleResult();
-        Assert.assertEquals("2010-01-01 10:00:00.000", sdf.format(result));
+        Assert.assertEquals("2010-01-01 09:00:00.000", sdf.format(result));
     }
 
     @Test
