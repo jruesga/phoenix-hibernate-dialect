@@ -36,7 +36,9 @@ public class Parameter implements Serializable {
     @SequenceGenerator(name = "P_SQ", schema = "T", sequenceName = "P_SQ", initialValue = 1, allocationSize = 1)
     private Long id;
 
-    @Column(name="VALUE", nullable=true, length = 50)
+    // NOTE: "VALUE" is a reserved word in Apache Phoenix and quote with "hibernate.globally_quoted_identifiers"
+    // breaks index generation. Just rename the physical name to something different.
+    @Column(name="PARAM", nullable=true, length = 50)
     private String value;
 
     public Long getId() {

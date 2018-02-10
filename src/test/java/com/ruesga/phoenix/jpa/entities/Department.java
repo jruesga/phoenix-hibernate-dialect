@@ -23,10 +23,9 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
 
-//FIXME
 @Entity(name="department")
-@Table(name="D", schema="T"/*,
-    indexes= {@Index(name="D_I0", columnList="DEPT_NAME", unique=true)}*/)
+@Table(name="D", schema="T",
+    indexes= {@Index(name="D_I0", columnList="DEPT_NAME", unique=true)})
 public class Department implements Serializable {
 
     private static final long serialVersionUID = 1L;
