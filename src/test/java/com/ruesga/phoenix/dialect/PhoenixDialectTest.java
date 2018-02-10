@@ -74,14 +74,14 @@ public class PhoenixDialectTest {
             Assert.fail("Test are not configured. Add a file named 'database.properties' to src/test/resources " +
                 "and add the following properties\n\n" +
                 "    test.phoenix.dfs.nodenames: HBase zookeepers nodenames in the form <server>:<port>\n" +
-                "    test.phoenix.dfs.db.path: HBase path in HDFS\\n\\n");
+                "    test.phoenix.dfs.db.path: HBase path in HDFS\n\n");
             return;
         }
 
         // Hibernate 4 doesn't have a "create schema" statement, so just create throught Phoenix directly
         executePhoenixRawStatement("create schema if not exists T");
 
-//        /* FIXME */ PhoenixDialect.register();
+        PhoenixDialect.register();
         em = JpaEntityManager.getInstance().createEntityManager();
     }
 

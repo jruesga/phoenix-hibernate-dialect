@@ -69,8 +69,8 @@ public class PhoenixDialect extends Dialect {
     static {
         register();
     }
-    public static void register() {
-        if (ctx != null) {
+    public static synchronized void register() {
+        if (ctx == null) {
             DynamicInstrumentationLoader.waitForInitialized();
             DynamicInstrumentationLoader.initLoadTimeWeavingContext();
             ctx = new ClassPathXmlApplicationContext("/META-INF/phoenix-spring-context.xml");
