@@ -24,7 +24,6 @@ with your current Gpg passphrase.
 
 Build againsts Hibernate 4 requires Java 7 and AspectJ 1.7.x
 
-
 ### Usage
 
 Add the following dependency to your pom.xml.
@@ -71,6 +70,16 @@ hbase-site.xml configuration.
         ...
     </configuration>
 ```
+
+
+NOTE: For Hibernate 4, you MUST ensure that phoenix driver is registered before entity manager
+creation.
+
+```java
+    PhoenixDriver.register();
+    JpaEntityManager.getInstance().createEntityManager();
+```
+
 
 ##### Using SpringBoot?
 
