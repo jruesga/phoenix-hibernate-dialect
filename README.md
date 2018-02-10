@@ -22,7 +22,7 @@ with your current Gpg passphrase.
 
 ### Requirements
 
-Build againsts Hibernate 5 requires Java 8 and AspectJ 1.8.x
+Build againsts Hibernate 5 requires Java 8 and AspectJ 1.8.x.
 
 
 ### Usage
@@ -35,7 +35,7 @@ Add the following dependency to your pom.xml.
         <dependency>
             <groupId>com.ruesga.phoenix</groupId>
             <artifactId>phoenix-hibernate-dialect</artifactId>
-            <version>0.0.3</version>
+            <version>0.0.3-hibernate5</version>
         </dependency>
         ...
     </dependencies>
