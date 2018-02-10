@@ -22,7 +22,7 @@
     <groupId>com.ruesga.phoenix</groupId>
     <artifactId>phoenix-hibernate-dialect</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.3</version>
+    <version>0.0.3-hibernate5</version>
     <name>phoenix-hibernate-dialect</name>
     <description>An Apache Phoenix Hibernate dialect.</description>
     <url>https://github.com/jruesga/phoenix-hibernate-dialect</url>
