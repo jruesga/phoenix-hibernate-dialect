@@ -15,8 +15,6 @@
  */
 package com.ruesga.phoenix.dialect;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -75,19 +73,6 @@ public class PhoenixDialectTest {
         }
 
         em = JpaEntityManager.getInstance().createEntityManager();
-
-        // create the database
-        em.getTransaction().begin();
-        BufferedReader is = new BufferedReader(new InputStreamReader(
-                PhoenixDialectTest.class.getResourceAsStream("/create_database.sql")));
-        String line = null;
-        while((line = is.readLine()) != null) {
-            if (line.trim().isEmpty() || line.startsWith("--")) {
-                continue;
-            }
-            em.createNativeQuery(line).executeUpdate();
-        }
-        em.getTransaction().commit();
     }
 
     @AfterClass
