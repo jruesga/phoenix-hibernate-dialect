@@ -45,6 +45,7 @@ import com.ruesga.phoenix.jpa.entities.Department;
 import com.ruesga.phoenix.jpa.entities.DepartmentEmployee;
 import com.ruesga.phoenix.jpa.entities.Employee;
 import com.ruesga.phoenix.jpa.entities.Gender;
+import com.ruesga.phoenix.jpa.entities.Parameter;
 import com.ruesga.phoenix.jpa.entities.Salary;
 import com.ruesga.phoenix.jpa.entities.TimeRange;
 
@@ -643,6 +644,26 @@ public class PhoenixDialectTest {
         q.setParameter("empNo", 10001);
         Employee updated = q.getSingleResult();
         Assert.assertEquals(e.getFirstName(), updated.getFirstName());
+    }
+
+    @Test
+    public void test501_Sequence() {
+        Parameter p = new Parameter();
+        p.setValue("x");
+        em.getTransaction().begin();
+        em.persist(p);
+        em.getTransaction().commit();
+
+        p = new Parameter();
+        p.setValue("y");
+        em.getTransaction().begin();
+        em.persist(p);
+        em.getTransaction().commit();
+
+        TypedQuery<Parameter> q = em.createQuery("select p from parameter p where p.id = :id", Parameter.class);
+        q.setParameter("id", 2L);
+        p = q.getSingleResult();
+        Assert.assertEquals(p.getValue(), "y");
     }
 
     private <T extends TimeRange> T findActiveEntity(Collection<T> range) {

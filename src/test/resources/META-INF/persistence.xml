@@ -35,6 +35,7 @@
             <property name="hibernate.hbm2ddl.auto" value="create-drop" />
             <property name="hibernate.hbm2dll.create_namespaces" value="true" />
             <property name="hibernate.hbm2ddl.import_files" value="create_database.sql"/>
+            <property name="hibernate.globally_quoted_identifiers" value="true"/>
 
             <property name="hibernate.connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />
             <property name="hibernate.c3p0.min_size" value="5" />

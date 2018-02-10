@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.MappingException;
 import org.hibernate.boot.Metadata;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.function.NoArgSQLFunction;
@@ -164,6 +165,42 @@ public class PhoenixDialect extends Dialect {
         registerFunction("rand", new NoArgSQLFunction("rand", StandardBasicTypes.DOUBLE));
     }
 
+    // SEQUENCE support ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    @Override
+    public boolean supportsSequences() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsPooledSequences() {
+        return true;
+    }
+
+    @Override
+    public String getSequenceNextValString(String sequenceName) throws MappingException {
+        return "SELECT " + getSelectSequenceNextValString(sequenceName);
+    }
+
+    @Override
+    public String getSelectSequenceNextValString(String sequenceName) throws MappingException {
+        return "NEXT VALUE FOR " + sequenceName;
+    }
+
+    @Override
+    protected String getCreateSequenceString(String sequenceName) throws MappingException {
+        return getCreateSequenceString(sequenceName, 1, 1);
+    }
+
+    @Override
+    protected String getCreateSequenceString(String sequenceName, int initialValue, int incrementSize) throws MappingException {
+        return "CREATE SEQUENCE " + sequenceName + " START WITH " + initialValue + " INCREMENT BY " + incrementSize;
+    }
+
+    @Override
+    protected String getDropSequenceString(String sequenceName) throws MappingException {
+        return "DROP SEQUENCE " + sequenceName;
+    }
 
     // lock acquisition support ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
