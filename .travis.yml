@@ -3,7 +3,7 @@ sudo: false
 language: java
 
 jdk:
-  - oraclejdk8
+  - oraclejdk7
 
 script:
   - ./mvnw -Dmaven.javadoc.skip=true -Dmaven.source.skip=true -B -V clean test
