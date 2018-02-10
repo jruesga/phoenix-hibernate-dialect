@@ -68,12 +68,16 @@ public class PhoenixDialect extends Dialect {
         }
     }
 
-    @SuppressWarnings("unused")
     private static ClassPathXmlApplicationContext ctx;
     static {
-        DynamicInstrumentationLoader.waitForInitialized();
-        DynamicInstrumentationLoader.initLoadTimeWeavingContext();
-        ctx = new ClassPathXmlApplicationContext("/META-INF/phoenix-spring-context.xml");
+        register();
+    }
+    public static synchronized void register() {
+        if (ctx == null) {
+            DynamicInstrumentationLoader.waitForInitialized();
+            DynamicInstrumentationLoader.initLoadTimeWeavingContext();
+            ctx = new ClassPathXmlApplicationContext("/META-INF/phoenix-spring-context.xml");
+        }
     }
 
     public PhoenixDialect() {

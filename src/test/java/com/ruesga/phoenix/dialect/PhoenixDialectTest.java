@@ -68,10 +68,11 @@ public class PhoenixDialectTest {
             Assert.fail("Test are not configured. Add a file named 'database.properties' to src/test/resources " +
                 "and add the following properties\n\n" +
                 "    test.phoenix.dfs.nodenames: HBase zookeepers nodenames in the form <server>:<port>\n" +
-                "    test.phoenix.dfs.db.path: HBase path in HDFS\\n\\n");
+                "    test.phoenix.dfs.db.path: HBase path in HDFS\n\n");
             return;
         }
 
+        PhoenixDialect.register();
         em = JpaEntityManager.getInstance().createEntityManager();
     }
 
