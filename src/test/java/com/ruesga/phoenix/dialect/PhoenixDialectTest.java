@@ -15,37 +15,31 @@
  */
 package com.ruesga.phoenix.dialect;
 
-import java.security.MessageDigest;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-import java.util.TimeZone;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-
+import com.ruesga.phoenix.jpa.JpaEntityManager;
 import com.ruesga.phoenix.jpa.entities.*;
+import com.ruesga.phoenix.jpa.entities.Parameter;
 import org.apache.commons.math3.util.Pair;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
+import org.hibernate.Criteria;
+import org.junit.*;
+import org.junit.rules.ExpectedException;
 import org.junit.runners.MethodSorters;
 
-import com.ruesga.phoenix.jpa.JpaEntityManager;
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
+import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PhoenixDialectTest {
 
     @ClassRule
     public static HBaseClusterTestRule cluster = new HBaseClusterTestRule("hbase-site.xml");
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     private static EntityManager em;
     private static SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
@@ -637,6 +631,7 @@ public class PhoenixDialectTest {
 
         v.setField("NEW FIELD VALUE");
         em.persist(v);
+        Assert.assertEquals(1, v.getVersion());
 
         em.getTransaction().commit();
 
@@ -644,6 +639,38 @@ public class PhoenixDialectTest {
         q.setParameter("id", 20001);
         VersionedEntity updated = q.getSingleResult();
         Assert.assertEquals(v.getField(), updated.getField());
+        Assert.assertEquals(2, updated.getVersion());
+    }
+
+    @Test
+    public void test403_ConcurrentUpdateGeneratesEntityExistsException() {
+        // Get the same row twice and detach from Hibernate to simulate two concurrent threads
+        TypedQuery<VersionedEntity> q = em.createQuery("select v from versioned v where v.id = :id", VersionedEntity.class);
+        q.setParameter("id", 20002);
+        VersionedEntity v1 = q.getSingleResult();
+        em.detach(v1);
+
+        q = em.createQuery("select v from versioned v where v.id = :id", VersionedEntity.class);
+        q.setParameter("id", 20002);
+        VersionedEntity v2 = q.getSingleResult();
+        em.detach(v2);
+
+        // Update the row
+        em.getTransaction().begin();
+        v1.setField("NEW VALUE 1");
+        em.persist(v1);
+        Assert.assertEquals(1, v1.getVersion());
+        em.getTransaction().commit();
+
+        // Update the row again, causing an EntityExistsException
+        em.getTransaction().begin();
+        v2.setField("NEW VALUE 2");
+        try {
+            thrown.expect(EntityExistsException.class);
+            em.persist(v2);
+        } finally {
+            em.getTransaction().rollback();
+        }
     }
 
     @Test
