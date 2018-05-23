@@ -34,7 +34,7 @@ Add the following dependency to your pom.xml.
         <dependency>
             <groupId>com.ruesga.phoenix</groupId>
             <artifactId>phoenix-hibernate-dialect</artifactId>
-            <version>0.0.3-hibernate4</version>
+            <version>0.0.4-hibernate4</version>
         </dependency>
         ...
     </dependencies>
