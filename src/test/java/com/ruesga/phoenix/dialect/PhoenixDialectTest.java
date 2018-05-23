@@ -33,6 +33,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
+import com.ruesga.phoenix.jpa.entities.*;
 import org.apache.commons.math3.util.Pair;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -44,13 +45,6 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import com.ruesga.phoenix.jpa.JpaEntityManager;
-import com.ruesga.phoenix.jpa.entities.Department;
-import com.ruesga.phoenix.jpa.entities.DepartmentEmployee;
-import com.ruesga.phoenix.jpa.entities.Employee;
-import com.ruesga.phoenix.jpa.entities.Gender;
-import com.ruesga.phoenix.jpa.entities.Parameter;
-import com.ruesga.phoenix.jpa.entities.Salary;
-import com.ruesga.phoenix.jpa.entities.TimeRange;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PhoenixDialectTest {
@@ -665,6 +659,25 @@ public class PhoenixDialectTest {
         q.setParameter("empNo", 10001);
         Employee updated = q.getSingleResult();
         Assert.assertEquals(e.getFirstName(), updated.getFirstName());
+    }
+
+    @Test
+    public void test402_UpdateVersionedEntity() {
+        TypedQuery<VersionedEntity> q = em.createQuery("select v from versioned v where v.id = :id", VersionedEntity.class);
+        q.setParameter("id", 20001);
+        VersionedEntity v = q.getSingleResult();
+
+        em.getTransaction().begin();
+
+        v.setField("NEW FIELD VALUE");
+        em.persist(v);
+
+        em.getTransaction().commit();
+
+        q = em.createQuery("select v from versioned v where v.id = :id", VersionedEntity.class);
+        q.setParameter("id", 20001);
+        VersionedEntity updated = q.getSingleResult();
+        Assert.assertEquals(v.getField(), updated.getField());
     }
 
     @Test
