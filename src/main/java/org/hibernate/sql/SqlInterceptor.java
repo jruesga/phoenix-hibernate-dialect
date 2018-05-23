@@ -34,6 +34,7 @@ public class SqlInterceptor {
     private Field updatePkColumnsField = null;
     private Field updateCommentField = null;
     private Field updateWhereColumnsField = null;
+    private Field updateVersionColumnNameField = null;
 
     public SqlInterceptor() {
         try {
@@ -47,6 +48,8 @@ public class SqlInterceptor {
             updateCommentField.setAccessible(true);
             updateDialectField = Update.class.getDeclaredField("dialect");
             updateDialectField.setAccessible(true);
+            updateVersionColumnNameField = Update.class.getDeclaredField("versionColumnName");
+            updateVersionColumnNameField.setAccessible(true);
         } catch (Exception e) {;
         }
     }
@@ -96,16 +99,58 @@ public class SqlInterceptor {
         Map columns = (Map) updateColumnsField.get(target);
         Map pkColumns = (Map) updatePkColumnsField.get(target);
         Map whereColumns = (Map) updateWhereColumnsField.get(target);
+        String versionColumn = (String) updateVersionColumnNameField.get(target);
 
-        // Set columns before pkcolumns and where columns to match parameter binding
-        StringBuilder names = new StringBuilder();
-        StringBuilder values = new StringBuilder();
-        updateUpsertBuffers(names, values, columns, false);
-        // TODO handle assignments
-        updateUpsertBuffers(names, values, pkColumns, true);
-        updateUpsertBuffers(names, values, whereColumns, true);
+        if (versionColumn == null) {
+            // Set columns before pkcolumns and where columns to match parameter binding
+            StringBuilder names = new StringBuilder();
+            StringBuilder values = new StringBuilder();
+            updateUpsertBuffers(names, values, columns, false);
+            // TODO handle assignments
+            updateUpsertBuffers(names, values, pkColumns, true);
+            updateUpsertBuffers(names, values, whereColumns, true);
 
-        sb.append(names).append(") values (").append(values).append(")");
+            sb.append(names).append(") values (").append(values).append(")");
+        } else {
+            // Set columns before pkcolumns and where columns to match parameter binding
+            StringBuilder names = new StringBuilder();
+            StringBuilder values = new StringBuilder();
+            updateUpsertBuffers(names, values, columns, false);
+            updateUpsertBuffers(names, values, whereColumns, true);
+            // TODO handle assignments
+            StringBuilder primaryKeys = new StringBuilder();
+            updateUpsertBuffers(primaryKeys, new StringBuilder(), pkColumns, true);
+
+            sb.append(names).append(primaryKeys).append(") select ").append(values).append(primaryKeys)
+              .append(" from ").append(target.getTableName())
+              .append(" where ");
+
+            boolean conditionsAppended = false;
+            Map.Entry e;
+            for(Iterator iter = pkColumns.entrySet().iterator(); iter.hasNext(); conditionsAppended = true) {
+                e = (Map.Entry)iter.next();
+                sb.append(e.getKey()).append('=').append(e.getValue());
+                if (iter.hasNext()) {
+                    sb.append(" and ");
+                }
+            }
+
+            for(Iterator iter = whereColumns.entrySet().iterator(); iter.hasNext(); conditionsAppended = true) {
+                e = (Map.Entry)iter.next();
+                if (conditionsAppended) {
+                    sb.append(" and ");
+                }
+
+                sb.append(e.getKey()).append(e.getValue());
+            }
+
+            if (conditionsAppended) {
+                sb.append(" and ");
+            }
+
+            sb.append(versionColumn).append("=?");
+        }
+
         return sb.toString();
     }
 
